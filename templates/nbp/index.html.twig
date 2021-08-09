@@ -5,7 +5,15 @@
 {% block body %}
 
 <div class="example-wrapper">
-    <h1>NbpController ✅ Index</h1>
-    <p>{{ result | json_encode }}</p>
+  <h1>NbpController ✅ Index</h1>
+  <table>
+    {% for item in items %}
+    <tr>
+      <td>{{ item.name }}</td>
+      <td>{{ item.currencyCode }}</td>
+      <td>{{ item.exchangeRate }}</td>
+    </tr>
+    {% endfor %}  
+  </table>
 </div>
 {% endblock %}

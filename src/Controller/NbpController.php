@@ -13,10 +13,10 @@ class NbpController extends AbstractController
     /**
      * @Route("/nbp", name="nbp_index")
      */
-    public function index(NbpApiService $nbp): Response
+    public function index(CurrencyRepository $currencyRepo): Response
     {
         return $this->render('nbp/index.html.twig', [
-            'result' => $nbp->getExchangeRates('A'),
+            'items' => $currencyRepo->findAll(),
         ]);
     }
 
@@ -25,10 +25,8 @@ class NbpController extends AbstractController
      */
     public function update(CurrencyRepository $currencyRepo, NbpApiService $nbp): Response
     {
-        $currencyRepo->updateExchangeRates($nbp->getExchangeRates('A'));
-
         return $this->render('nbp/update.html.twig', [
-            'result' => '',
+            'result' => $currencyRepo->updateExchangeRates($nbp->getExchangeRates('A')),
         ]);
     }
 }
