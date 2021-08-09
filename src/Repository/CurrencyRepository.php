@@ -21,6 +21,7 @@ class CurrencyRepository extends ServiceEntityRepository
     
     public function updateExchangeRates($table)
     {
+        $changes = 0;
         $currencies = $this->findAll();
 
         foreach ($table as $rate) {
@@ -32,8 +33,12 @@ class CurrencyRepository extends ServiceEntityRepository
                 }
             }
             if ($found) {
-                $currency->setExchangeRate($rate['mid']);
+                if ($currency->getExchangeRate() != $rate['mid']) {
+                    $changes++;
+                    $currency->setExchangeRate($rate['mid']);
+                }
             } else {
+                $changes++;
                 $entity = new Currency();
                 $entity->setName($rate['currency']);
                 $entity->setCurrencyCode($rate['code']);
@@ -41,7 +46,8 @@ class CurrencyRepository extends ServiceEntityRepository
                 $this->getEntityManager()->persist($entity);
             }
         }
-
         $this->getEntityManager()->flush();
+
+        return $changes;
     }
 }
